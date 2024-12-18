@@ -1,14 +1,13 @@
-# Ignore WordPress core files
+# Ignore everything in wordpress
+wordpress/*
+
+# Do NOT ignore wp-content folder (custom themes/plugins)
+!wordpress/wp-content/
+
+# Ignore specific wp-content subfolders you don’t need
+wordpress/wp-content/uploads/
+wordpress/wp-content/cache/
+
+# Ignore wp-admin and wp-includes
 wordpress/wp-admin/
 wordpress/wp-includes/
-wordpress/wp-content/uploads/
-
-# Ignore temporary/system files
-*.sql
-.DS_Store
-Thumbs.db
-*.log
-*.pid
-
-# Ignore node_modules (if used)
-node_modules/
