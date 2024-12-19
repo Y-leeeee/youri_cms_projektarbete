@@ -1,13 +1,15 @@
-# Ignore everything in wordpress
+
 wordpress/*
 
-# Do NOT ignore wp-content folder (custom themes/plugins)
+
 !wordpress/wp-content/
 
-# Ignore specific wp-content subfolders you don’t need
+
 wordpress/wp-content/uploads/
 wordpress/wp-content/cache/
 
-# Ignore wp-admin and wp-includes
+
 wordpress/wp-admin/
 wordpress/wp-includes/
+
+.DS_Store
