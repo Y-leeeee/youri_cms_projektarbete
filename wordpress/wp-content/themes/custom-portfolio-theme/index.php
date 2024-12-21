@@ -6,7 +6,7 @@
     <title><?php bloginfo('name'); ?></title>
 </head>
 <body>
-    <h1>Welcome to <?php bloginfo('name'); ?>!</h1>
-    <p>This is the Custom Portfolio Theme.</p>
+    <h1><?php bloginfo('name'); ?></h1>
+    <p><?php bloginfo('description'); ?></p>
 </body>
 </html>
