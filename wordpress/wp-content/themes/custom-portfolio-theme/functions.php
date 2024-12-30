@@ -14,7 +14,7 @@ function register_projects_post_type() {
         'label' => 'Projects',
         'supports' => array('title', 'editor', 'thumbnail'),
         'has_archive' => true,
-        'rewrite' => array('slug' => 'projects'),
+        'rewrite' => array('slug' => 'portfolio-projects'),
     );
     register_post_type('projects', $args);
 }

@@ -2,8 +2,7 @@
 /*
 Template Name: Projects
 */
-?>
-<?php get_header(); ?>
+get_header(); ?>
 <main>
     <h1>My Projects</h1>
     <ul>
@@ -15,14 +14,14 @@ Template Name: Projects
 
         if ($projects->have_posts()) {
             while ($projects->have_posts()) {
-                $projects->the_post();
+                $projects->the_post(); // Setup post data
         ?>
                 <li>
                     <a href="<?php echo esc_url(get_permalink()); ?>">
                         <?php the_title(); ?>
                     </a>
                     <?php if (has_post_thumbnail()) : ?>
-                        <img src="<?php the_post_thumbnail_url('medium'); ?>" alt="<?php the_title(); ?>">
+                        <img src="<?php the_post_thumbnail_url('medium'); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
                     <?php endif; ?>
                 </li>
         <?php
