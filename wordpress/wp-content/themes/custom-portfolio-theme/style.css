@@ -4,6 +4,7 @@ Description: A custom theme for displaying projects.
 Author: Youri Lee
 Version: 1.0
 */
+
 .projects-page {
   max-width: 800px;
   margin: 0 auto;
@@ -47,4 +48,45 @@ Version: 1.0
 
 .project-item a:hover {
   color: #005177;
+}
+
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+.footer-navigation {
+  margin: 10px 0;
+}
+
+.footer-menu {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer-menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.social-links {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-link i {
+  font-size: 24px;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.social-link i:hover {
+  color: #0073e6;
 }

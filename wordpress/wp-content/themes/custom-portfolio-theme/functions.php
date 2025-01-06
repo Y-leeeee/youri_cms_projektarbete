@@ -38,3 +38,14 @@ function enqueue_theme_styles() {
     wp_enqueue_style('main-style', get_stylesheet_uri());
 }
 add_action('wp_enqueue_scripts', 'enqueue_theme_styles');
+
+function enqueue_font_awesome() {
+    wp_enqueue_style(
+        'font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
+        array(), // No dependencies
+        '6.5.0'   // Version number
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
+
