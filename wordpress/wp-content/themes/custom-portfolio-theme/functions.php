@@ -33,3 +33,8 @@ function register_project_categories() {
     register_taxonomy('categories', 'projects', $args);
 }
 add_action('init', 'register_project_categories');
+
+function enqueue_theme_styles() {
+    wp_enqueue_style('main-style', get_stylesheet_uri());
+}
+add_action('wp_enqueue_scripts', 'enqueue_theme_styles');

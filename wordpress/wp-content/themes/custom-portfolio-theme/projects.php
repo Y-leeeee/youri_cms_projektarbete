@@ -3,9 +3,9 @@
 Template Name: Projects
 */
 get_header(); ?>
-<main>
+<main class="projects-page">
     <h1>My Projects</h1>
-    <ul>
+    <ul class="projects-list">
         <?php
         $projects = new WP_Query(array(
             'post_type' => 'projects',
@@ -16,7 +16,7 @@ get_header(); ?>
             while ($projects->have_posts()) {
                 $projects->the_post(); // Setup post data
         ?>
-                <li>
+                <li class="project-item">
                     <a href="<?php echo esc_url(get_permalink()); ?>">
                         <?php the_title(); ?>
                     </a>
@@ -34,3 +34,5 @@ get_header(); ?>
     </ul>
 </main>
 <?php get_footer(); ?>
+
+
