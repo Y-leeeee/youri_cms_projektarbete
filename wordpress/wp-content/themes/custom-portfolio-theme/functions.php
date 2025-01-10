@@ -15,10 +15,12 @@ function register_projects_post_type() {
         'supports' => array('title', 'editor', 'thumbnail'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'portfolio-projects'),
+        'show_in_rest' => true, // Ensure it's available in the REST API
     );
     register_post_type('projects', $args);
 }
 add_action('init', 'register_projects_post_type');
+
 
 function register_project_categories() {
     $args = array(
