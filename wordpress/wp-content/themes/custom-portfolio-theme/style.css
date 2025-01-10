@@ -90,3 +90,54 @@ Version: 1.0
 .social-link i:hover {
   color: #0073e6;
 }
+
+/* About Me Page Styles */
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.about-page h1 {
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-picture {
+  max-width: 150px;
+  border-radius: 50%;
+  margin: 20px auto;
+  display: block;
+}
+
+.education,
+.work-experience {
+  margin-bottom: 40px;
+}
+
+.education h2,
+.work-experience h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-decoration: underline;
+}
+
+.education ul,
+.work-experience ul {
+  list-style: none;
+  padding: 0;
+}
+
+.education li,
+.work-experience li {
+  margin-bottom: 15px;
+}
+
+.education li strong,
+.work-experience li strong {
+  font-weight: bold;
+  font-size: 18px;
+}
