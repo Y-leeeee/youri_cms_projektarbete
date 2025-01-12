@@ -60,4 +60,9 @@ function register_menus() {
 }
 add_action('init', 'register_menus');
 
+function expose_acf_to_rest_api() {
+    add_filter('acf/rest_api/field_settings/show_in_rest', '__return_true'); // Expose settings
+    add_filter('acf/rest_api/field_settings/show_in_rest', '__return_true'); // Expose values
+}
+add_action('init', 'expose_acf_to_rest_api');
 
