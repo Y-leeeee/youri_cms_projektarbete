@@ -1,23 +1,45 @@
-export default async function ProjectPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const res = await fetch(
-    `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/projects?slug=${params.slug}`
-  );
-  const project = await res.json();
+"use client";
 
-  if (!project.length) {
-    return <h1>Project not found</h1>;
+import React, { useEffect, useState } from "react";
+
+export default function ProjectPage({ params }: { params: { slug: string } }) {
+  const [project, setProject] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const res = await fetch(
+          `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/projects?slug=${params.slug}`
+        );
+
+        if (!res.ok) {
+          console.error("Failed to fetch project:", res.status, res.statusText);
+          return;
+        }
+
+        const projectData = await res.json();
+        console.log("Client project data:", projectData);
+        setProject(projectData[0]); // WordPress returns an array for slugs
+      } catch (error) {
+        console.error("Unexpected error fetching project:", error);
+      }
+    }
+
+    fetchProject();
+  }, [params.slug]);
+
+  if (!project) {
+    return <div>Loading project...</div>;
   }
 
-  const details = project[0];
-
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold">{details.title.rendered}</h1>
-      <div dangerouslySetInnerHTML={{ __html: details.content.rendered }} />
+    <div>
+      <h1>{project.title?.rendered || "No Title Available"}</h1>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: project.content?.rendered || "No content available",
+        }}
+      />
     </div>
   );
 }
