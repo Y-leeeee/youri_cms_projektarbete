@@ -51,3 +51,14 @@ function add_project_url_to_rest($response, $post, $request) {
     return $response;
 }
 add_filter('rest_prepare_projects', 'add_project_url_to_rest', 10, 3);
+
+function add_about_me_fields_to_rest($response, $post, $request) {
+    if ($post->post_type === 'page' && get_the_title($post->ID) === 'About') {
+        $acf_fields = get_fields($post->ID);
+        if ($acf_fields) {
+            $response->data['acf'] = $acf_fields;
+        }
+    }
+    return $response;
+}
+add_filter('rest_prepare_page', 'add_about_me_fields_to_rest', 10, 3);
