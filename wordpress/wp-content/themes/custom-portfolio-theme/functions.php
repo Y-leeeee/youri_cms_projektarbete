@@ -9,17 +9,20 @@ function theme_setup() {
 add_action('after_setup_theme', 'theme_setup');
 
 function register_projects_post_type() {
-    $args = array(
+    register_post_type('projects', array(
+        'labels' => array(
+            'name' => 'Projects',
+            'singular_name' => 'Project',
+        ),
         'public' => true,
-        'label' => 'Projects',
+        'show_in_rest' => true,  // This line enables the REST API support
+        'rest_base' => 'projects',  // You can set a custom base for the route
         'supports' => array('title', 'editor', 'thumbnail'),
-        'has_archive' => true,
-        'rewrite' => array('slug' => 'portfolio-projects'),
-        'show_in_rest' => true, // Enable REST API support
-    );
-    register_post_type('projects', $args);
+    ));
 }
 add_action('init', 'register_projects_post_type');
+
+
 
 function add_cors_headers() {
     header("Access-Control-Allow-Origin: *");
@@ -37,3 +40,14 @@ add_action('template_redirect', function () {
         exit;
     }
 });
+
+function add_project_url_to_rest($response, $post, $request) {
+    if ($post->post_type === 'projects') {
+        $project_url = get_field('project_url', $post->ID);
+        if ($project_url) {
+            $response->data['acf']['project_url'] = $project_url;
+        }
+    }
+    return $response;
+}
+add_filter('rest_prepare_projects', 'add_project_url_to_rest', 10, 3);
