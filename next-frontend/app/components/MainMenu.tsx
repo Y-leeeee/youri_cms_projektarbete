@@ -3,36 +3,19 @@ import Link from "next/link";
 
 export default function MainMenu() {
   return (
-    <nav className="bg-pink-500 py-4 px-6">
-      <ul className="flex justify-center space-x-6">
+    <nav>
+      <ul>
         <li>
-          <Link href="/" className="text-white hover:text-black transition">
-            Home
-          </Link>
+          <a href="/">Home</a>
         </li>
         <li>
-          <Link
-            href="/projects"
-            className="text-white hover:text-black transition"
-          >
-            Projects
-          </Link>
+          <a href="/projects">Projects</a>
         </li>
         <li>
-          <Link
-            href="/about"
-            className="text-white hover:text-black transition"
-          >
-            About
-          </Link>
+          <a href="/about">About</a>
         </li>
         <li>
-          <Link
-            href="/contact"
-            className="text-white hover:text-black transition"
-          >
-            Contact
-          </Link>
+          <a href="/contact">Contact</a>
         </li>
       </ul>
     </nav>

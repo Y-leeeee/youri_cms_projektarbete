@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+@font-face {
+  font-family: "Game Of Squids";
+  src: url("/fonts/Game Of Squids.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-color: #000;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* Default font */
+}
+
+.squid-game-font {
+  font-family: "Game Of Squids", sans-serif;
+  color: #ff017d;
+}
+
+.korean-text {
+  font-family: "Noto Sans KR", sans-serif;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+/* Title Animation */
+@keyframes pulse {
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animated-title {
+  font-family: "Game Of Squids", sans-serif;
+  font-size: 3rem;
+  font-weight: normal;
+  color: #ff017d;
+  text-transform: uppercase;
+  position: relative;
+
+  text-shadow: -1px -1px 0 #d4005d, 1px 1px 0 #d4005d;
+
+  animation: pulse 5s infinite ease-in-out;
+}
+
+/* Flip Animation for Profile and Soldier Images */
+.flip-front img,
+.flip-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.flip-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  perspective: 1000px;
+}
+
+.flip-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.flip-front {
+  transform: rotateY(0deg);
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* Navigation Styling */
+nav {
+  background-color: #ff017d;
+  padding: 10px 0;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav li {
+  display: inline;
+}
+
+nav a {
+  color: white;
+  font-family: Arial, sans-serif;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  text-align: center;
+}
+
+footer {
+  padding: 20px 0;
+  text-align: center;
+}
+
+footer .footer-image img {
+  display: block;
+  margin: 0 auto;
+  width: 100px;
+  height: auto;
+}
