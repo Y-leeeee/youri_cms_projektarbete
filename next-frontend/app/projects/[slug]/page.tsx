@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Project {
   title: { rendered: string };
@@ -24,6 +25,7 @@ export default function ProjectPage({
   const [params, setParams] = useState<{ slug: string } | null>(null);
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchParamsAndProject() {
@@ -146,6 +148,23 @@ export default function ProjectPage({
           </a>
         </p>
       )}
+
+      {/* Go Back to Projects Button */}
+      <div style={{ marginTop: "20px" }}>
+        <button
+          onClick={() => router.push("/projects")}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#555",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Go Back to Projects
+        </button>
+      </div>
     </div>
   );
 }

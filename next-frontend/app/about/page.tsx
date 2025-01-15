@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import MainMenu from "../components/MainMenu";
 
 interface AboutData {
   institution_name_1?: string;
@@ -72,6 +73,7 @@ export default function AboutPage() {
 
   return (
     <div>
+      <MainMenu />
       <h1>About Me</h1>
       <p>Hi, I’m a frontend developer. This is my portfolio site!</p>
 

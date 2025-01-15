@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import MainMenu from "../components/MainMenu";
 
 interface Project {
   id: number;
@@ -71,6 +72,7 @@ export default function ProjectsPage() {
 
   return (
     <div>
+      <MainMenu />
       <h1>Projects</h1>
       {isLoading ? (
         <div>Loading projects...</div>
