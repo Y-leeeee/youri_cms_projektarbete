@@ -21,3 +21,5 @@ wordpress/wp-includes/
 
 youri_cms_projektarbete/
 node_modules/
+
+.env*

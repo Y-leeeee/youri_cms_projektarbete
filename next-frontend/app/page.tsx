@@ -80,20 +80,24 @@ export default function HomePage() {
           >
             {/* Front Side: Profile Photo */}
             <div className="flip-front">
-              <img
-                src={profilePhotoUrl}
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
+              {profilePhotoUrl && (
+                <img
+                  src={profilePhotoUrl}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
 
             {/* Back Side: Soldier Image */}
             <div className="flip-back">
-              <img
-                src={soldierImageUrl}
-                alt="Squid Game Soldier"
-                className="w-full h-full object-cover"
-              />
+              {soldierImageUrl && (
+                <img
+                  src={soldierImageUrl}
+                  alt="Squid Game Soldier"
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
           </div>
         </div>
