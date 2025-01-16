@@ -13,16 +13,55 @@ interface Project {
   link?: string;
 }
 
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch categories
   useEffect(() => {
-    async function fetchProjects() {
+    async function fetchCategories() {
       try {
         const res = await fetch(
-          "http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/projects"
+          "http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/categories"
         );
+
+        if (!res.ok) {
+          console.error(
+            "Failed to fetch categories:",
+            res.status,
+            res.statusText
+          );
+          return;
+        }
+
+        const categoriesData: Category[] = await res.json();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Unexpected error fetching categories:", error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
+
+  // Fetch projects
+  useEffect(() => {
+    async function fetchProjects() {
+      setIsLoading(true);
+      try {
+        const url = selectedCategory
+          ? `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/projects?categories=${selectedCategory}`
+          : "http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/projects";
+
+        const res = await fetch(url);
 
         if (!res.ok) {
           console.error(
@@ -68,12 +107,33 @@ export default function ProjectsPage() {
     }
 
     fetchProjects();
-  }, []);
+  }, [selectedCategory]);
 
   return (
     <div className="projects-page">
       <MainMenu />
       <h1 className="page-title">Projects</h1>
+
+      {/* Category Filter */}
+      <div className="category-filter">
+        <label htmlFor="category">Filter by Category:</label>
+        <select
+          id="category"
+          value={selectedCategory || ""}
+          onChange={
+            (e) => setSelectedCategory(e.target.value || null) // Set null if "All Categories" is selected
+          }
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Projects List */}
       {isLoading ? (
         <div>Loading projects...</div>
       ) : (

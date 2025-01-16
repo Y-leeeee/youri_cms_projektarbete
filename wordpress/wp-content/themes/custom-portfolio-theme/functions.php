@@ -62,3 +62,9 @@ function add_about_me_fields_to_rest($response, $post, $request) {
     return $response;
 }
 add_filter('rest_prepare_page', 'add_about_me_fields_to_rest', 10, 3);
+
+function add_project_categories() {
+    register_taxonomy_for_object_type('category', 'projects');
+    register_taxonomy_for_object_type('post_tag', 'projects');
+}
+add_action('init', 'add_project_categories');
