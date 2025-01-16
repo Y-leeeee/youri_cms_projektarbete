@@ -87,84 +87,52 @@ export default function ProjectPage({
   }, [rawParams]);
 
   if (isLoading) {
-    return <div>Loading project...</div>;
+    return <div className="loading">Loading project...</div>;
   }
 
   if (!project) {
-    return <div>No project found.</div>;
+    return <div className="no-project">No project found.</div>;
   }
 
   return (
-    <div>
-      <h1>{project.title.rendered || "No Title Available"}</h1>
-      <p>
+    <div className="project-page">
+      <h1 className="project-title">
+        {project.title.rendered || "No Title Available"}
+      </h1>
+      <p className="project-description">
         {project.content.rendered.replace(/<[^>]+>/g, "") ||
           "No Description Available"}
       </p>
 
-      {/* Display images if available */}
-      <div>
+      {/* Display images */}
+      <div className="project-images">
         {project.image1?.url && (
-          <img
-            src={project.image1.url}
-            alt="Image1"
-            style={{ maxWidth: "400px", margin: "20px 0" }}
-          />
+          <img src={project.image1.url} alt="Project Image 1" />
         )}
         {project.image2?.url && (
-          <img
-            src={project.image2.url}
-            alt="Image2"
-            style={{ maxWidth: "400px", margin: "20px 0" }}
-          />
+          <img src={project.image2.url} alt="Project Image 2" />
         )}
         {project.image3?.url && (
-          <img
-            src={project.image3.url}
-            alt="Image3"
-            style={{ maxWidth: "400px", margin: "20px 0" }}
-          />
+          <img src={project.image3.url} alt="Project Image 3" />
         )}
       </div>
 
-      {/* Display Project URL if available */}
+      {/* Display Project URL */}
       {project.acf?.project_url && (
-        <p>
-          <a
-            href={project.acf.project_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-block",
-              marginTop: "20px",
-              padding: "10px 15px",
-              backgroundColor: "#007BFF",
-              color: "#FFF",
-              textDecoration: "none",
-              borderRadius: "5px",
-            }}
-          >
-            View Live Project
-          </a>
-        </p>
+        <a
+          href={project.acf.project_url}
+          className="project-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View Live Project
+        </a>
       )}
 
-      {/* Go Back to Projects Button */}
-      <div style={{ marginTop: "20px" }}>
-        <button
-          onClick={() => router.push("/projects")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#555",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Go Back to Projects
-        </button>
-      </div>
+      {/* Back to Projects Button */}
+      <button className="back-button" onClick={() => router.push("/projects")}>
+        Go Back to Projects
+      </button>
     </div>
   );
 }

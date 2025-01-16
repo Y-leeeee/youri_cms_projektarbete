@@ -16,13 +16,11 @@ const API_BASE_URL =
 
 export default function ContactPage() {
   const [acfData, setAcfData] = useState<AcfData | null>(null);
-  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("API Base URL:", API_BASE_URL); // Debugging
-
     async function fetchContactData() {
       try {
         const response = await fetch(`${API_BASE_URL}/pages?slug=contact`);
@@ -94,14 +92,46 @@ export default function ContactPage() {
   return (
     <div>
       <MainMenu />
-      {profileImageUrl && <img src={profileImageUrl} alt="Profile" />}
-      <p>Email: {acfData.email}</p>
-      <p>
-        GitHub: <a href={acfData.github_url}>{acfData.github_url}</a>
-      </p>
-      <p>
-        LinkedIn: <a href={acfData.linkedin_url}>{acfData.linkedin_url}</a>
-      </p>
+      <div className="contact-container">
+        {/* Profile Image */}
+        {profileImageUrl && (
+          <img
+            src={profileImageUrl}
+            alt="Profile"
+            className="profile-picture"
+          />
+        )}
+
+        {/* Contact Icons */}
+        <div className="contact-icons">
+          <a
+            href={`mailto:${acfData.email}`}
+            aria-label="Send an Email"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fas fa-envelope"></i>
+          </a>
+
+          <a
+            href={acfData.github_url}
+            aria-label="Visit GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fab fa-github"></i>
+          </a>
+
+          <a
+            href={acfData.linkedin_url}
+            aria-label="Visit LinkedIn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

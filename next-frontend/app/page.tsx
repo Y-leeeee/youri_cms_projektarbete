@@ -104,16 +104,18 @@ export default function HomePage() {
 
         {/* Presentation Text */}
         <p className="korean-text text-2xl mt-4">
-          ⭕️ㅣ유리의 포트폴리트 🔺ㅏ이트에 오신것을 환영 하니🟥다.{" "}
+          ⭕️ㅣ유리의 포트폴리트 🔺ㅏ이트에 오신것을 환영 하🟥니다.{" "}
         </p>
       </div>
       <footer>
         <div className="footer-image">
-          <img
-            src="/images/footer/squid-game-symbols.png"
-            alt="Squid Game Symbols"
-            className="w-auto h-16 mx-auto"
-          />
+          <a href="/contact" aria-label="Go to Contact Page">
+            <img
+              src="/images/footer/squid-game-symbols.png"
+              alt="Squid Game Symbols"
+              className="w-auto h-16 mx-auto"
+            />
+          </a>
         </div>
       </footer>
     </div>

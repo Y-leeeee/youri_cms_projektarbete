@@ -72,65 +72,75 @@ export default function AboutPage() {
   }
 
   return (
-    <div>
+    <div className="about-page">
       <MainMenu />
-      <h1>About Me</h1>
-      <p>Hi, I’m a frontend developer. This is my portfolio site!</p>
+      <h1 className="page-title">About Me</h1>
+      <p className="intro-text">
+        Hi, I’m a frontend developer. This is my portfolio site!
+      </p>
 
       {/* Education Section */}
-      <h2>Education</h2>
-      {aboutData.institution_name_1 && (
-        <div>
-          <h3>{aboutData.institution_name_1}</h3>
-          <p>{aboutData.degree_1}</p>
-          <p>{aboutData.completion_year_1}</p>
+      <section className="education-section">
+        <h2>Education</h2>
+        <div className="education-list">
+          {aboutData.institution_name_1 && (
+            <article className="education-card">
+              <h3>{aboutData.institution_name_1}</h3>
+              <p>{aboutData.degree_1}</p>
+              <p>{aboutData.completion_year_1}</p>
+            </article>
+          )}
+          {aboutData.institution_name_2 && (
+            <article className="education-card">
+              <h3>{aboutData.institution_name_2}</h3>
+              <p>{aboutData.degree_2}</p>
+              <p>{aboutData.completion_year_2}</p>
+            </article>
+          )}
+          {aboutData.institution_name_3 && (
+            <article className="education-card">
+              <h3>{aboutData.institution_name_3}</h3>
+              <p>{aboutData.degree_3}</p>
+              <p>{aboutData.completion_year_3}</p>
+            </article>
+          )}
         </div>
-      )}
-      {aboutData.institution_name_2 && (
-        <div>
-          <h3>{aboutData.institution_name_2}</h3>
-          <p>{aboutData.degree_2}</p>
-          <p>{aboutData.completion_year_2}</p>
-        </div>
-      )}
-      {aboutData.institution_name_3 && (
-        <div>
-          <h3>{aboutData.institution_name_3}</h3>
-          <p>{aboutData.degree_3}</p>
-          <p>{aboutData.completion_year_3}</p>
-        </div>
-      )}
+      </section>
 
       {/* Work Experience Section */}
-      <h2>Work Experience</h2>
-      {aboutData.job_title_1 && (
-        <div>
-          <h3>{aboutData.job_title_1}</h3>
-          <p>{aboutData.company_1}</p>
-          <p>{aboutData.years_of_service_1}</p>
+      <section className="experience-section">
+        <h2>Work Experience</h2>
+        <div className="experience-list">
+          {aboutData.job_title_1 && (
+            <article className="experience-card">
+              <h3>{aboutData.job_title_1}</h3>
+              <p>{aboutData.company_1}</p>
+              <p>{aboutData.years_of_service_1}</p>
+            </article>
+          )}
+          {aboutData.job_title_2 && (
+            <article className="experience-card">
+              <h3>{aboutData.job_title_2}</h3>
+              <p>{aboutData.company_2}</p>
+              <p>{aboutData.years_of_service_2}</p>
+            </article>
+          )}
+          {aboutData.job_title_3 && (
+            <article className="experience-card">
+              <h3>{aboutData.job_title_3}</h3>
+              <p>{aboutData.company_3}</p>
+              <p>{aboutData.years_of_service_3}</p>
+            </article>
+          )}
+          {aboutData.job_title_4 && (
+            <article className="experience-card">
+              <h3>{aboutData.job_title_4}</h3>
+              <p>{aboutData.company_4}</p>
+              <p>{aboutData.years_of_service_4}</p>
+            </article>
+          )}
         </div>
-      )}
-      {aboutData.job_title_2 && (
-        <div>
-          <h3>{aboutData.job_title_2}</h3>
-          <p>{aboutData.company_2}</p>
-          <p>{aboutData.years_of_service_2}</p>
-        </div>
-      )}
-      {aboutData.job_title_3 && (
-        <div>
-          <h3>{aboutData.job_title_3}</h3>
-          <p>{aboutData.company_3}</p>
-          <p>{aboutData.years_of_service_3}</p>
-        </div>
-      )}
-      {aboutData.job_title_4 && (
-        <div>
-          <h3>{aboutData.job_title_4}</h3>
-          <p>{aboutData.company_4}</p>
-          <p>{aboutData.years_of_service_4}</p>
-        </div>
-      )}
+      </section>
     </div>
   );
 }

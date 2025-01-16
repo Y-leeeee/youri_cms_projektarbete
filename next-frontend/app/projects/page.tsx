@@ -71,24 +71,24 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <div>
+    <div className="projects-page">
       <MainMenu />
-      <h1>Projects</h1>
+      <h1 className="page-title">Projects</h1>
       {isLoading ? (
         <div>Loading projects...</div>
       ) : (
-        <ul>
+        <div className="projects-grid">
           {projects.length === 0 ? (
             <div>No projects found</div>
           ) : (
             projects.map((project) => (
-              <li key={project.id}>
-                <h2>
+              <article key={project.id} className="project-card">
+                <h2 className="project-title">
                   <a href={`/projects/${project.slug}`}>
                     {project.title.rendered || "No Title Available"}
                   </a>
                 </h2>
-                <p>
+                <p className="project-description">
                   {project.content.rendered.replace(/<[^>]+>/g, "") ||
                     "No Description Available"}
                 </p>
@@ -96,15 +96,15 @@ export default function ProjectsPage() {
                   <img
                     src={project.imageUrl}
                     alt={project.title.rendered || "Project Image"}
-                    style={{ maxWidth: "200px", margin: "10px 0" }}
+                    className="project-image"
                   />
                 ) : (
                   <p>No Image Available</p>
                 )}
-              </li>
+              </article>
             ))
           )}
-        </ul>
+        </div>
       )}
     </div>
   );
