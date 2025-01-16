@@ -534,3 +534,9 @@ footer .footer-image img {
     font-size: 0.9rem;
   }
 }
+
+.page-content {
+  padding-top: 100px;
+  margin: 0 auto;
+  max-width: 800px;
+}

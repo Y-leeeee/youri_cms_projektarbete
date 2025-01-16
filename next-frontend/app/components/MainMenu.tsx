@@ -17,6 +17,15 @@ export default function MainMenu() {
         <li>
           <a href="/contact">Contact</a>
         </li>
+        <li>
+          <a href="/testimonials">Testimonials</a>
+        </li>
+        <li>
+          <a href="/skills">Skills</a>
+        </li>
+        <li>
+          <a href="/services">Services</a>
+        </li>
       </ul>
     </nav>
   );

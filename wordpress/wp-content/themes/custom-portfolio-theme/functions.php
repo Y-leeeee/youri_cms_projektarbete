@@ -15,8 +15,8 @@ function register_projects_post_type() {
             'singular_name' => 'Project',
         ),
         'public' => true,
-        'show_in_rest' => true,  // This line enables the REST API support
-        'rest_base' => 'projects',  // You can set a custom base for the route
+        'show_in_rest' => true,  
+        'rest_base' => 'projects',  
         'supports' => array('title', 'editor', 'thumbnail'),
     ));
 }
@@ -68,3 +68,42 @@ function add_project_categories() {
     register_taxonomy_for_object_type('post_tag', 'projects');
 }
 add_action('init', 'add_project_categories');
+
+function register_testimonials_post_type() {
+    register_post_type('testimonials', array(
+        'labels' => array(
+            'name' => 'Testimonials',
+            'singular_name' => 'Testimonial',
+        ),
+        'public' => true,
+        'show_in_rest' => true,
+        'supports' => array('title', 'editor', 'custom-fields'),
+    ));
+}
+add_action('init', 'register_testimonials_post_type');
+
+function register_skills_post_type() {
+    register_post_type('skills', array(
+        'labels' => array(
+            'name' => 'Skills',
+            'singular_name' => 'Skill',
+        ),
+        'public' => true,
+        'show_in_rest' => true,
+        'supports' => array('title', 'custom-fields'),
+    ));
+}
+add_action('init', 'register_skills_post_type');
+
+function register_services_post_type() {
+    register_post_type('services', array(
+        'labels' => array(
+            'name' => 'Services',
+            'singular_name' => 'Service',
+        ),
+        'public' => true,
+        'show_in_rest' => true,
+        'supports' => array('title', 'editor', 'custom-fields', 'thumbnail'),
+    ));
+}
+add_action('init', 'register_services_post_type');
