@@ -50,7 +50,7 @@ export async function getPages(): Promise<Page[]> {
     return await fetchData<Page[]>(url);
   } catch (error) {
     console.error("Error in getPages:", error);
-    return [];
+    return []; // Return an empty array in case of an error
   }
 }
 
@@ -59,10 +59,10 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
     const url = `${API_BASE_URL}/pages?slug=${slug}`;
     const pages = await fetchData<Page[]>(url);
-    return pages.length > 0 ? pages[0] : null;
+    return pages.length > 0 ? pages[0] : null; // Return the first page or null
   } catch (error) {
     console.error("Error in getPageBySlug:", error);
-    return null;
+    return null; // Return null if there's an error
   }
 }
 
@@ -73,7 +73,7 @@ export async function getProjects(): Promise<Project[]> {
     return await fetchData<Project[]>(url);
   } catch (error) {
     console.error("Error in getProjects:", error);
-    return [];
+    return []; // Return an empty array in case of an error
   }
 }
 
@@ -82,9 +82,9 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   try {
     const url = `${API_BASE_URL}/projects?slug=${slug}`;
     const projects = await fetchData<Project[]>(url);
-    return projects.length > 0 ? projects[0] : null;
+    return projects.length > 0 ? projects[0] : null; // Return the first project or null
   } catch (error) {
     console.error("Error in getProjectBySlug:", error);
-    return null;
+    return null; // Return null if there's an error
   }
 }
