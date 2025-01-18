@@ -9,7 +9,9 @@ interface Page {
     rendered: string;
   };
   slug: string;
-  customFields?: Record<string, unknown>; // Replace `[key: string]: any`
+  customFields?: {
+    footnotes?: string;
+  };
 }
 
 interface Project {
@@ -18,7 +20,9 @@ interface Project {
     rendered: string;
   };
   slug: string;
-  customFields?: Record<string, unknown>; // Replace `[key: string]: any`
+  customFields?: {
+    footnotes?: string;
+  };
 }
 
 // Utility function for fetching data
@@ -33,7 +37,9 @@ async function fetchData<T>(url: string): Promise<T> {
     return await response.json();
   } catch (error) {
     console.error(`Error fetching data from ${url}:`, error);
-    throw error; // Rethrow the error for higher-level handling if needed
+    throw new Error(
+      "Something went wrong while fetching data. Please try again."
+    );
   }
 }
 
