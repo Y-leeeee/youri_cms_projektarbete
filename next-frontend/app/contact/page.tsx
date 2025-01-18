@@ -1,84 +1,84 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import MainMenu from "../components/MainMenu";
-
-interface AcfData {
-  email?: string;
-  github_url?: string;
-  linkedin_url?: string;
-}
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export default function ContactPage() {
-  const [acfData, setAcfData] = useState<AcfData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface Page {
+  id: number;
+  title: {
+    rendered: string;
+  };
+  content?: {
+    rendered: string;
+  };
+  slug: string;
+  customFields?: Record<string, unknown>; // Replace `[key: string]: any`
+}
 
-  useEffect(() => {
-    const fetchContactPage = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/pages?slug=contact`);
-        if (!res.ok) {
-          throw new Error(`Failed to fetch Contact page: ${res.statusText}`);
-        }
-        const data = await res.json();
-        setAcfData(data[0]?.acf || null);
-      } catch (error: any) {
-        console.error("Error fetching Contact page:", error);
-        setError(error.message || "An unknown error occurred.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+interface Project {
+  id: number;
+  title: {
+    rendered: string;
+  };
+  slug: string;
+  customFields?: Record<string, unknown>; // Replace `[key: string]: any`
+}
 
-    fetchContactPage();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div>
-        <MainMenu />
-        <p>Loading...</p>
-      </div>
-    );
+// Utility function for fetching data
+async function fetchData<T>(url: string): Promise<T> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(
+        `Request failed with status ${response.status}: ${response.statusText}`
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching data from ${url}:`, error);
+    throw error; // Rethrow the error for higher-level handling if needed
   }
+}
 
-  if (error) {
-    return (
-      <div>
-        <MainMenu />
-        <p>Error: {error}</p>
-        <p>Please try again later.</p>
-      </div>
-    );
+// Fetch all pages
+export async function getPages(): Promise<Page[]> {
+  try {
+    const url = `${API_BASE_URL}/pages`;
+    return await fetchData<Page[]>(url);
+  } catch (error) {
+    console.error("Error in getPages:", error);
+    return [];
   }
+}
 
-  if (!acfData) {
-    return (
-      <div>
-        <MainMenu />
-        <p>No contact information available.</p>
-      </div>
-    );
+// Fetch a single page by slug
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  try {
+    const url = `${API_BASE_URL}/pages?slug=${slug}`;
+    const pages = await fetchData<Page[]>(url);
+    return pages.length > 0 ? pages[0] : null;
+  } catch (error) {
+    console.error("Error in getPageBySlug:", error);
+    return null;
   }
+}
 
-  return (
-    <div>
-      <MainMenu />
-      <h1>Contact</h1>
-      <p>Email: {acfData.email || "Not available"}</p>
-      {acfData.github_url && (
-        <p>
-          GitHub: <a href={acfData.github_url}>{acfData.github_url}</a>
-        </p>
-      )}
-      {acfData.linkedin_url && (
-        <p>
-          LinkedIn: <a href={acfData.linkedin_url}>{acfData.linkedin_url}</a>
-        </p>
-      )}
-    </div>
-  );
+// Fetch all projects
+export async function getProjects(): Promise<Project[]> {
+  try {
+    const url = `${API_BASE_URL}/projects`;
+    return await fetchData<Project[]>(url);
+  } catch (error) {
+    console.error("Error in getProjects:", error);
+    return [];
+  }
+}
+
+// Fetch a single project by slug
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  try {
+    const url = `${API_BASE_URL}/projects?slug=${slug}`;
+    const projects = await fetchData<Project[]>(url);
+    return projects.length > 0 ? projects[0] : null;
+  } catch (error) {
+    console.error("Error in getProjectBySlug:", error);
+    return null;
+  }
 }

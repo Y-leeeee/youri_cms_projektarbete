@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import MainMenu from "../components/MainMenu";
+import Image from "next/image";
 
 interface Testimonial {
   id: number;
@@ -16,6 +17,7 @@ interface Testimonial {
 const TestimonialsPage = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -28,8 +30,9 @@ const TestimonialsPage = () => {
         }
         const data = await res.json();
         setTestimonials(data);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Error fetching testimonials:", error);
+        setError("Failed to load testimonials. Please try again later.");
       } finally {
         setIsLoading(false);
       }
@@ -42,7 +45,16 @@ const TestimonialsPage = () => {
     return (
       <div>
         <MainMenu />
-        <p>Loading testimonials...</p>
+        <p className="text-center mt-6">Loading testimonials...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <MainMenu />
+        <p className="text-center text-red-500 mt-6">{error}</p>
       </div>
     );
   }
@@ -50,28 +62,41 @@ const TestimonialsPage = () => {
   return (
     <div>
       <MainMenu />
-      <div className="page-content">
-        <h1>Testimonials</h1>
+      <div className="page-content container mx-auto px-4">
+        <h1 className="text-3xl font-bold text-center my-6">Testimonials</h1>
         {testimonials.length === 0 ? (
-          <p>No testimonials available.</p>
+          <p className="text-center">No testimonials available.</p>
         ) : (
-          <div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((testimonial) => (
-              <div key={testimonial.id} className="testimonial">
-                <h2>{testimonial.title.rendered}</h2>
-                <p>{testimonial.acf.feedback}</p>
+              <div
+                key={testimonial.id}
+                className="testimonial bg-white shadow-md rounded-lg p-4 text-center"
+              >
+                <h2 className="text-xl font-semibold mb-2">
+                  {testimonial.title.rendered || "No title available"}
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  {testimonial.acf.feedback || "No feedback available"}
+                </p>
                 {testimonial.acf.associated_project && (
-                  <p>
+                  <p className="text-gray-600 mb-4">
                     Associated Project:{" "}
                     {testimonial.acf.associated_project.post_title}
                   </p>
                 )}
-                {testimonial.acf.client_image && (
-                  <img
-                    src={testimonial.acf.client_image.url}
-                    alt={testimonial.title.rendered}
-                    width={100}
-                  />
+                {testimonial.acf.client_image?.url ? (
+                  <div className="relative w-20 h-20 mx-auto">
+                    <Image
+                      src={testimonial.acf.client_image.url}
+                      alt={testimonial.title.rendered || "Client Image"}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                    />
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No client image available.</p>
                 )}
               </div>
             ))}

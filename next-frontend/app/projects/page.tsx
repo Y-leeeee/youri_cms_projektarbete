@@ -27,9 +27,14 @@ export default function ProjectsPage() {
 
         const data: Project[] = await res.json();
         setProjects(data);
-      } catch (error: any) {
-        console.error("Error fetching projects:", error);
-        setError(error.message || "An unknown error occurred.");
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error("Error fetching projects:", error.message);
+          setError(error.message);
+        } else {
+          console.error("Unknown error fetching projects:", error);
+          setError("An unknown error occurred.");
+        }
       }
     };
 
@@ -41,12 +46,21 @@ export default function ProjectsPage() {
       <MainMenu />
       <h1>Projects</h1>
       {error ? (
-        <p>Error: {error}</p>
+        <p role="alert">Error: {error}</p>
       ) : (
         <ul>
-          {projects.map((project) => (
-            <li key={project.id}>{project.title.rendered}</li>
-          ))}
+          {projects.length === 0 ? (
+            <p>No projects available.</p>
+          ) : (
+            projects.map((project) => (
+              <li key={project.id}>
+                <h2>{project.title.rendered}</h2>
+                <div
+                  dangerouslySetInnerHTML={{ __html: project.content.rendered }}
+                />
+              </li>
+            ))
+          )}
         </ul>
       )}
     </div>

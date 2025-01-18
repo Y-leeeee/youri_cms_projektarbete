@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import MainMenu from "./components/MainMenu";
+import Image from "next/image";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -11,6 +12,7 @@ export default function HomePage() {
   const [soldierImageUrl, setSoldierImageUrl] = useState<string | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
 
+  // Fetch page data and media URLs
   useEffect(() => {
     const fetchPageData = async () => {
       try {
@@ -48,6 +50,7 @@ export default function HomePage() {
     fetchPageData();
   }, []);
 
+  // Image flip effect
   useEffect(() => {
     const flipInterval = setInterval(() => {
       setIsFlipped((prev) => !prev);
@@ -68,16 +71,45 @@ export default function HomePage() {
   return (
     <div className="homepage">
       <MainMenu />
-      <h1>Welcome to My Site</h1>
-      <div className="flip-container">
+      <h1 className="text-4xl font-bold my-6">Welcome to My Site</h1>
+      <div className="flip-container w-64 h-64 mx-auto relative">
         <div
-          className="flip-inner"
+          className={`flip-inner absolute inset-0 transition-transform duration-500`}
           style={{
             transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
           }}
         >
-          {profilePhotoUrl && <img src={profilePhotoUrl} alt="Profile" />}
-          {soldierImageUrl && <img src={soldierImageUrl} alt="Soldier" />}
+          {/* Front Image */}
+          {profilePhotoUrl && (
+            <div
+              className="absolute inset-0 backface-hidden"
+              style={{ transform: "rotateY(0deg)" }}
+            >
+              <Image
+                src={profilePhotoUrl}
+                alt="Profile"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            </div>
+          )}
+
+          {/* Back Image */}
+          {soldierImageUrl && (
+            <div
+              className="absolute inset-0 backface-hidden"
+              style={{ transform: "rotateY(180deg)" }}
+            >
+              <Image
+                src={soldierImageUrl}
+                alt="Soldier"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

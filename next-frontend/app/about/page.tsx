@@ -8,10 +8,10 @@ interface AboutData {
   institution_name_1?: string;
   degree_1?: string;
   completion_year_1?: string;
-  // Add more fields if needed
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
 export default function AboutPage() {
   const [aboutData, setAboutData] = useState<AboutData | null>(null);
@@ -27,9 +27,14 @@ export default function AboutPage() {
         }
         const data = await res.json();
         setAboutData(data[0]?.acf || null);
-      } catch (error: any) {
-        console.error("Error fetching About page:", error);
-        setError(error.message || "An unknown error occurred.");
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error("Error fetching About page:", error.message);
+          setError(error.message);
+        } else {
+          console.error("Error fetching About page:", error);
+          setError("An unknown error occurred.");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -42,7 +47,11 @@ export default function AboutPage() {
     return (
       <div>
         <MainMenu />
-        <p>Loading...</p>
+        <div className="spinner">
+          <p role="status" aria-live="polite">
+            Loading...
+          </p>
+        </div>
       </div>
     );
   }
@@ -70,16 +79,17 @@ export default function AboutPage() {
     <div>
       <MainMenu />
       <h1>About Me</h1>
-      <p>{aboutData.description || "Description not available."}</p>
+      <p>{aboutData.description ?? "Description not available."}</p>
 
-      {/* Example: Displaying education details if available */}
       {aboutData.institution_name_1 && (
         <div>
           <h2>Education</h2>
-          <p>
-            {aboutData.institution_name_1} - {aboutData.degree_1} (
-            {aboutData.completion_year_1})
-          </p>
+          <ul>
+            <li>
+              <strong>{aboutData.institution_name_1}</strong>:{" "}
+              {aboutData.degree_1} ({aboutData.completion_year_1})
+            </li>
+          </ul>
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -17,23 +18,22 @@ interface Project {
     image3?: number;
     project_url?: string;
   };
+  [key: string]: unknown; // Allow dynamic properties
 }
 
 export default function ProjectPage({
-  params: rawParams,
+  params: _params, // Prefixed with an underscore to indicate it's unused
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [params, setParams] = useState<{ slug: string } | null>(null);
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchParamsAndProject() {
+    async function fetchProject() {
       try {
-        const resolvedParams = await rawParams;
-        setParams(resolvedParams);
+        const resolvedParams = await _params;
 
         const res = await fetch(
           `${API_BASE_URL}/projects?slug=${resolvedParams.slug}`
@@ -51,30 +51,30 @@ export default function ProjectPage({
         const projectData: Project[] = await res.json();
         const project = projectData[0];
 
+        // Fetch image URLs
         if (project.acf) {
-          if (project.acf.image1) {
-            const mediaRes1 = await fetch(
-              `${API_BASE_URL}/media/${project.acf.image1}`
-            );
-            const mediaData1 = await mediaRes1.json();
-            project.image1 = { url: mediaData1.source_url };
-          }
+          const imageFetchPromises = ["image1", "image2", "image3"].map(
+            async (key) => {
+              const acfKey = key as keyof typeof project.acf;
+              if (project.acf && project.acf[acfKey]) {
+                const mediaRes = await fetch(
+                  `${API_BASE_URL}/media/${project.acf[acfKey]}`
+                );
+                const mediaData = await mediaRes.json();
 
-          if (project.acf.image2) {
-            const mediaRes2 = await fetch(
-              `${API_BASE_URL}/media/${project.acf.image2}`
-            );
-            const mediaData2 = await mediaRes2.json();
-            project.image2 = { url: mediaData2.source_url };
-          }
+                if (typeof mediaData.source_url === "string") {
+                  project[key as keyof Project] = { url: mediaData.source_url }; // Type-safe assignment
+                } else {
+                  console.warn(
+                    `Invalid media URL for ${key}:`,
+                    mediaData.source_url
+                  );
+                }
+              }
+            }
+          );
 
-          if (project.acf.image3) {
-            const mediaRes3 = await fetch(
-              `${API_BASE_URL}/media/${project.acf.image3}`
-            );
-            const mediaData3 = await mediaRes3.json();
-            project.image3 = { url: mediaData3.source_url };
-          }
+          await Promise.all(imageFetchPromises);
         }
 
         setProject(project);
@@ -85,8 +85,8 @@ export default function ProjectPage({
       }
     }
 
-    fetchParamsAndProject();
-  }, [rawParams]);
+    fetchProject();
+  }, [_params]);
 
   if (isLoading) {
     return <div className="loading">Loading project...</div>;
@@ -107,15 +107,39 @@ export default function ProjectPage({
       </p>
 
       {/* Display images */}
-      <div className="project-images">
+      <div className="project-images grid grid-cols-1 md:grid-cols-3 gap-4">
         {project.image1?.url && (
-          <img src={project.image1.url} alt="Project Image 1" />
+          <div className="relative w-full h-64">
+            <Image
+              src={project.image1.url}
+              alt="Project Image 1"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
         )}
         {project.image2?.url && (
-          <img src={project.image2.url} alt="Project Image 2" />
+          <div className="relative w-full h-64">
+            <Image
+              src={project.image2.url}
+              alt="Project Image 2"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
         )}
         {project.image3?.url && (
-          <img src={project.image3.url} alt="Project Image 3" />
+          <div className="relative w-full h-64">
+            <Image
+              src={project.image3.url}
+              alt="Project Image 3"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
         )}
       </div>
 
@@ -123,7 +147,7 @@ export default function ProjectPage({
       {project.acf?.project_url && (
         <a
           href={project.acf.project_url}
-          className="project-link"
+          className="project-link text-blue-500 hover:underline mt-4 block"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -132,7 +156,10 @@ export default function ProjectPage({
       )}
 
       {/* Back to Projects Button */}
-      <button className="back-button" onClick={() => router.push("/projects")}>
+      <button
+        className="back-button mt-6 px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={() => router.push("/projects")}
+      >
         Go Back to Projects
       </button>
     </div>

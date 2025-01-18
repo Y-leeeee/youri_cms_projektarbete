@@ -21,60 +21,64 @@ interface Project {
   [key: string]: any;
 }
 
+// Utility function for fetching data
+async function fetchData<T>(url: string): Promise<T> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(
+        `Request failed with status ${response.status}: ${response.statusText}`
+      );
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching data from ${url}:`, error);
+    throw error; // Rethrow the error for higher-level handling if needed
+  }
+}
+
+// Fetch all pages
 export async function getPages(): Promise<Page[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/pages`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch pages: ${response.statusText}`);
-    }
-    const pages: Page[] = await response.json();
-    return pages;
+    const url = `${API_BASE_URL}/pages`;
+    return await fetchData<Page[]>(url);
   } catch (error) {
-    console.error("Error fetching pages:", error);
+    console.error("Error in getPages:", error);
     return [];
   }
 }
 
+// Fetch a single page by slug
 export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/pages?slug=${slug}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch page: ${response.statusText}`);
-    }
-    const pages: Page[] = await response.json();
+    const url = `${API_BASE_URL}/pages?slug=${slug}`;
+    const pages = await fetchData<Page[]>(url);
     return pages.length > 0 ? pages[0] : null;
   } catch (error) {
-    console.error("Error fetching page by slug:", error);
+    console.error("Error in getPageBySlug:", error);
     return null;
   }
 }
 
+// Fetch all projects
 export async function getProjects(): Promise<Project[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/projects`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch projects");
-    }
-    const projects: Project[] = await response.json();
-    return projects;
+    const url = `${API_BASE_URL}/projects`;
+    return await fetchData<Project[]>(url);
   } catch (error) {
-    console.error("Error fetching projects:", error);
+    console.error("Error in getProjects:", error);
     return [];
   }
 }
 
+// Fetch a single project by slug
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/projects?slug=${slug}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch project by slug");
-    }
-    const projects: Project[] = await response.json();
+    const url = `${API_BASE_URL}/projects?slug=${slug}`;
+    const projects = await fetchData<Project[]>(url);
     return projects.length > 0 ? projects[0] : null;
   } catch (error) {
-    console.error("Error fetching project by slug:", error);
+    console.error("Error in getProjectBySlug:", error);
     return null;
   }
 }
-
-export { getPages, getPageBySlug, getProjects, getProjectBySlug };
