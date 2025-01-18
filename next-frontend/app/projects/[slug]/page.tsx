@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 interface Project {
   title: { rendered: string };
   content: { rendered: string };
@@ -34,7 +36,7 @@ export default function ProjectPage({
         setParams(resolvedParams);
 
         const res = await fetch(
-          `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/projects?slug=${resolvedParams.slug}`
+          `${API_BASE_URL}/projects?slug=${resolvedParams.slug}`
         );
 
         if (!res.ok) {
@@ -52,7 +54,7 @@ export default function ProjectPage({
         if (project.acf) {
           if (project.acf.image1) {
             const mediaRes1 = await fetch(
-              `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/media/${project.acf.image1}`
+              `${API_BASE_URL}/media/${project.acf.image1}`
             );
             const mediaData1 = await mediaRes1.json();
             project.image1 = { url: mediaData1.source_url };
@@ -60,7 +62,7 @@ export default function ProjectPage({
 
           if (project.acf.image2) {
             const mediaRes2 = await fetch(
-              `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/media/${project.acf.image2}`
+              `${API_BASE_URL}/media/${project.acf.image2}`
             );
             const mediaData2 = await mediaRes2.json();
             project.image2 = { url: mediaData2.source_url };
@@ -68,7 +70,7 @@ export default function ProjectPage({
 
           if (project.acf.image3) {
             const mediaRes3 = await fetch(
-              `http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/media/${project.acf.image3}`
+              `${API_BASE_URL}/media/${project.acf.image3}`
             );
             const mediaData3 = await mediaRes3.json();
             project.image3 = { url: mediaData3.source_url };

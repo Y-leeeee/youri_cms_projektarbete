@@ -17,12 +17,15 @@ const TestimonialsPage = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     async function fetchTestimonials() {
       try {
-        const res = await fetch(
-          "http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/testimonials"
-        );
+        const res = await fetch(`${API_BASE_URL}/testimonials`);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch testimonials: ${res.statusText}`);
+        }
         const data = await res.json();
         setTestimonials(data);
       } catch (error) {
@@ -33,9 +36,16 @@ const TestimonialsPage = () => {
     }
 
     fetchTestimonials();
-  }, []);
+  }, [API_BASE_URL]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div>
+        <MainMenu />
+        <p>Loading testimonials...</p>
+      </div>
+    );
+  }
 
   return (
     <div>

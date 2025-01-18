@@ -4,143 +4,84 @@ import React, { useEffect, useState } from "react";
 import MainMenu from "../components/MainMenu";
 
 interface AboutData {
+  description?: string;
   institution_name_1?: string;
   degree_1?: string;
   completion_year_1?: string;
-  institution_name_2?: string;
-  degree_2?: string;
-  completion_year_2?: string;
-  institution_name_3?: string;
-  degree_3?: string;
-  completion_year_3?: string;
-  job_title_1?: string;
-  company_1?: string;
-  years_of_service_1?: string;
-  job_title_2?: string;
-  company_2?: string;
-  years_of_service_2?: string;
-  job_title_3?: string;
-  company_3?: string;
-  years_of_service_3?: string;
-  job_title_4?: string;
-  company_4?: string;
-  years_of_service_4?: string;
+  // Add more fields if needed
 }
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function AboutPage() {
   const [aboutData, setAboutData] = useState<AboutData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchAboutPage() {
+    const fetchAboutPage = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/pages?slug=about"
-        );
-
+        const res = await fetch(`${API_BASE_URL}/pages?slug=about`);
         if (!res.ok) {
-          console.error(
-            "Failed to fetch About page:",
-            res.status,
-            res.statusText
-          );
-          return;
+          throw new Error(`Failed to fetch About page: ${res.statusText}`);
         }
-
-        const pages = await res.json();
-        const aboutPage = pages[0];
-
-        if (aboutPage.acf) {
-          setAboutData(aboutPage.acf);
-        }
-      } catch (error) {
-        console.error("Unexpected error fetching About page:", error);
+        const data = await res.json();
+        setAboutData(data[0]?.acf || null);
+      } catch (error: any) {
+        console.error("Error fetching About page:", error);
+        setError(error.message || "An unknown error occurred.");
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
     fetchAboutPage();
   }, []);
 
   if (isLoading) {
-    return <div>Loading About page...</div>;
+    return (
+      <div>
+        <MainMenu />
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <MainMenu />
+        <p>Error: {error}</p>
+        <p>Please try again later.</p>
+      </div>
+    );
   }
 
   if (!aboutData) {
-    return <div>No About data found.</div>;
+    return (
+      <div>
+        <MainMenu />
+        <p>No about information available.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="about-page">
+    <div>
       <MainMenu />
-      <h1 className="page-title">About Me</h1>
-      <p className="intro-text">
-        Hi, I’m a frontend developer. This is my portfolio site!
-      </p>
+      <h1>About Me</h1>
+      <p>{aboutData.description || "Description not available."}</p>
 
-      {/* Education Section */}
-      <section className="education-section">
-        <h2>Education</h2>
-        <div className="education-list">
-          {aboutData.institution_name_1 && (
-            <article className="education-card">
-              <h3>{aboutData.institution_name_1}</h3>
-              <p>{aboutData.degree_1}</p>
-              <p>{aboutData.completion_year_1}</p>
-            </article>
-          )}
-          {aboutData.institution_name_2 && (
-            <article className="education-card">
-              <h3>{aboutData.institution_name_2}</h3>
-              <p>{aboutData.degree_2}</p>
-              <p>{aboutData.completion_year_2}</p>
-            </article>
-          )}
-          {aboutData.institution_name_3 && (
-            <article className="education-card">
-              <h3>{aboutData.institution_name_3}</h3>
-              <p>{aboutData.degree_3}</p>
-              <p>{aboutData.completion_year_3}</p>
-            </article>
-          )}
+      {/* Example: Displaying education details if available */}
+      {aboutData.institution_name_1 && (
+        <div>
+          <h2>Education</h2>
+          <p>
+            {aboutData.institution_name_1} - {aboutData.degree_1} (
+            {aboutData.completion_year_1})
+          </p>
         </div>
-      </section>
-
-      {/* Work Experience Section */}
-      <section className="experience-section">
-        <h2>Work Experience</h2>
-        <div className="experience-list">
-          {aboutData.job_title_1 && (
-            <article className="experience-card">
-              <h3>{aboutData.job_title_1}</h3>
-              <p>{aboutData.company_1}</p>
-              <p>{aboutData.years_of_service_1}</p>
-            </article>
-          )}
-          {aboutData.job_title_2 && (
-            <article className="experience-card">
-              <h3>{aboutData.job_title_2}</h3>
-              <p>{aboutData.company_2}</p>
-              <p>{aboutData.years_of_service_2}</p>
-            </article>
-          )}
-          {aboutData.job_title_3 && (
-            <article className="experience-card">
-              <h3>{aboutData.job_title_3}</h3>
-              <p>{aboutData.company_3}</p>
-              <p>{aboutData.years_of_service_3}</p>
-            </article>
-          )}
-          {aboutData.job_title_4 && (
-            <article className="experience-card">
-              <h3>{aboutData.job_title_4}</h3>
-              <p>{aboutData.company_4}</p>
-              <p>{aboutData.years_of_service_4}</p>
-            </article>
-          )}
-        </div>
-      </section>
+      )}
     </div>
   );
 }

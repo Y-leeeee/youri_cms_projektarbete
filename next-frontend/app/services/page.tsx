@@ -17,12 +17,15 @@ const ServicesPage = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     async function fetchServices() {
       try {
-        const res = await fetch(
-          "http://localhost:8888/cms_projektarbete/wordpress/wp-json/wp/v2/services"
-        );
+        const res = await fetch(`${API_BASE_URL}/services`);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch services: ${res.statusText}`);
+        }
         const data = await res.json();
         setServices(data);
       } catch (error) {
@@ -33,9 +36,15 @@ const ServicesPage = () => {
     }
 
     fetchServices();
-  }, []);
+  }, [API_BASE_URL]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <div>
+        <MainMenu />
+        <p>Loading services...</p>
+      </div>
+    );
 
   return (
     <div>
@@ -43,23 +52,30 @@ const ServicesPage = () => {
       <div className="page-content">
         <h1>My Services</h1>
         <div className="services-grid">
-          {services.map((service) => (
-            <div key={service.id} className="service-card">
-              <h2>{service.acf.service_name || "No service name provided"}</h2>
-              <p>
-                {service.acf.service_description || "No description available"}
-              </p>
-              {service.acf.service_icon ? (
-                <img
-                  src={service.acf.service_icon}
-                  alt={service.acf.service_name}
-                  width={100}
-                />
-              ) : (
-                <p>No icon available</p>
-              )}
-            </div>
-          ))}
+          {services.length === 0 ? (
+            <p>No services available</p>
+          ) : (
+            services.map((service) => (
+              <div key={service.id} className="service-card">
+                <h2>
+                  {service.acf.service_name || "No service name provided"}
+                </h2>
+                <p>
+                  {service.acf.service_description ||
+                    "No description available"}
+                </p>
+                {service.acf.service_icon ? (
+                  <img
+                    src={service.acf.service_icon}
+                    alt={service.acf.service_name}
+                    width={100}
+                  />
+                ) : (
+                  <p>No icon available</p>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
