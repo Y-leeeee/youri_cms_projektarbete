@@ -2,16 +2,35 @@
 
 import React, { useEffect, useState } from "react";
 import MainMenu from "../components/MainMenu";
+import client from "@/lib/contentful";
+import { EntrySkeletonType, Entry } from "contentful";
 
-interface AboutData {
-  description?: string;
-  institution_name_1?: string;
-  degree_1?: string;
-  completion_year_1?: string;
+interface EducationEntry {
+  institutionName: string;
+  degree: string;
+  completionYear: string;
 }
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+interface WorkExperienceEntry {
+  jobTitle: string;
+  company: string;
+  yearsOfService: string;
+}
+
+interface AboutFields extends EntrySkeletonType {
+  fields: {
+    education?: EducationEntry[];
+    workExperience?: WorkExperienceEntry[];
+  };
+  contentTypeId: "aboutMe";
+}
+
+type AboutEntry = Entry<AboutFields>;
+
+interface AboutData {
+  education?: EducationEntry[];
+  workExperience?: WorkExperienceEntry[];
+}
 
 export default function AboutPage() {
   const [aboutData, setAboutData] = useState<AboutData | null>(null);
@@ -21,12 +40,29 @@ export default function AboutPage() {
   useEffect(() => {
     const fetchAboutPage = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/pages?slug=about`);
-        if (!res.ok) {
-          throw new Error(`Failed to fetch About page: ${res.statusText}`);
+        if (
+          !process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID ||
+          !process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN
+        ) {
+          throw new Error(
+            "Contentful environment variables are not set. Please check your .env.local file."
+          );
         }
-        const data = await res.json();
-        setAboutData(data[0]?.acf || null);
+
+        const res = await client.getEntries<AboutFields>({
+          content_type: "aboutMe",
+        });
+
+        if (res.items.length === 0) {
+          throw new Error("No about page content found.");
+        }
+
+        const data = res.items[0].fields;
+
+        setAboutData({
+          education: data.education || [],
+          workExperience: data.workExperience || [],
+        });
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error("Error fetching About page:", error.message);
@@ -79,16 +115,31 @@ export default function AboutPage() {
     <div>
       <MainMenu />
       <h1>About Me</h1>
-      <p>{aboutData.description ?? "Description not available."}</p>
 
-      {aboutData.institution_name_1 && (
+      {aboutData.education && aboutData.education.length > 0 && (
         <div>
           <h2>Education</h2>
           <ul>
-            <li>
-              <strong>{aboutData.institution_name_1}</strong>:{" "}
-              {aboutData.degree_1} ({aboutData.completion_year_1})
-            </li>
+            {aboutData.education.map((edu, index) => (
+              <li key={index}>
+                <strong>{edu.institutionName}</strong>: {edu.degree} (
+                {edu.completionYear})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {aboutData.workExperience && aboutData.workExperience.length > 0 && (
+        <div>
+          <h2>Work Experience</h2>
+          <ul>
+            {aboutData.workExperience.map((work, index) => (
+              <li key={index}>
+                <strong>{work.jobTitle}</strong> at {work.company} (
+                {work.yearsOfService})
+              </li>
+            ))}
           </ul>
         </div>
       )}

@@ -1,25 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function MainMenu() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Projects", path: "/projects" },
     { name: "About", path: "/about" },
-
-    { name: "Testimonials", path: "/testimonials" },
-    { name: "Skills", path: "/skills" },
-    { name: "Services", path: "/services" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
     <nav aria-label="Main navigation">
-      <ul className="menu">
+      <button
+        className="menu-toggle"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
+        ☰
+      </button>
+      <ul className={`menu ${isOpen ? "open" : ""}`}>
         {menuItems.map((item) => (
           <li
             key={item.path}

@@ -2,65 +2,100 @@
 
 import React, { useEffect, useState } from "react";
 import MainMenu from "../components/MainMenu";
+import Link from "next/link"; // Use Link for navigation in Next.js
 
 interface Project {
-  id: number;
-  title: { rendered: string };
-  content: { rendered: string };
-  featured_media: number | null;
+  sys: { id: string };
+  fields: {
+    title: string;
+    slug: string; // Assuming slug is part of the project entry in Contentful
+  };
 }
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchProjects = async () => {
+      if (
+        !process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID ||
+        !process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN
+      ) {
+        setError("Contentful environment variables are not properly set.");
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const res = await fetch(`${API_BASE_URL}/projects`);
+        const res = await fetch(
+          `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/master/entries?access_token=${process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN}&content_type=project`
+        );
 
         if (!res.ok) {
           throw new Error(`Failed to fetch projects: ${res.statusText}`);
         }
 
-        const data: Project[] = await res.json();
-        setProjects(data);
+        const data = await res.json();
+
+        const projectsData = data.items.map((item: any) => ({
+          sys: item.sys,
+          fields: item.fields,
+        }));
+
+        setProjects(projectsData);
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error("Error fetching projects:", error.message);
-          setError(error.message);
+          setError("Failed to load projects. Please try again later.");
         } else {
           console.error("Unknown error fetching projects:", error);
           setError("An unknown error occurred.");
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchProjects();
-  }, [API_BASE_URL]);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        <MainMenu />
+        <p>Loading projects...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <MainMenu />
+        <p role="alert">Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <MainMenu />
       <h1>Projects</h1>
-      {error ? (
-        <p role="alert">Error: {error}</p>
+      {projects.length === 0 ? (
+        <p>No projects available.</p>
       ) : (
         <ul>
-          {projects.length === 0 ? (
-            <p>No projects available.</p>
-          ) : (
-            projects.map((project) => (
-              <li key={project.id}>
-                <h2>{project.title.rendered}</h2>
-                <div
-                  dangerouslySetInnerHTML={{ __html: project.content.rendered }}
-                />
-              </li>
-            ))
-          )}
+          {projects.map((project) => (
+            <li key={project.sys.id}>
+              <h2>{project.fields.title}</h2>
+              {/* Link to the individual project page */}
+              <Link href={`/projects/${project.fields.slug}`}>
+                View Project
+              </Link>
+            </li>
+          ))}
         </ul>
       )}
     </div>

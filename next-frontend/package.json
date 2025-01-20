@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
-    "http-proxy-middleware": "^3.0.3",
-    "next": "15.1.4",
+    "contentful": "^11.4.3",
+    "next": "^15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
