@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import MainMenu from "../components/MainMenu";
-import Link from "next/link"; // Use Link for navigation in Next.js
+import Link from "next/link";
 
 interface Project {
   sys: { id: string };
   fields: {
     title: string;
-    slug: string; // Assuming slug is part of the project entry in Contentful
+    slug: string;
   };
 }
 
