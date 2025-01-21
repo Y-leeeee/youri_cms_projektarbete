@@ -53,7 +53,7 @@ export default function AboutPage() {
           content_type: "aboutMe",
         });
 
-        if (res.items.length === 0) {
+        if (!res.items.length) {
           throw new Error("No about page content found.");
         }
 
@@ -63,14 +63,11 @@ export default function AboutPage() {
           education: data.education || [],
           workExperience: data.workExperience || [],
         });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error("Error fetching About page:", error.message);
-          setError(error.message);
-        } else {
-          console.error("Error fetching About page:", error);
-          setError("An unknown error occurred.");
-        }
+      } catch (err) {
+        console.error("Error fetching About page:", err);
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred."
+        );
       } finally {
         setIsLoading(false);
       }
@@ -116,6 +113,7 @@ export default function AboutPage() {
       <MainMenu />
       <h1>About Me</h1>
 
+      {/* Education Section */}
       {aboutData.education && aboutData.education.length > 0 && (
         <div>
           <h2>Education</h2>
@@ -130,6 +128,7 @@ export default function AboutPage() {
         </div>
       )}
 
+      {/* Work Experience Section */}
       {aboutData.workExperience && aboutData.workExperience.length > 0 && (
         <div>
           <h2>Work Experience</h2>
