@@ -14,7 +14,7 @@ interface EducationEntry {
 interface WorkExperienceEntry {
   jobTitle: string;
   company: string;
-  yearsOfService: string;
+  yearOfService: string;
 }
 
 interface AboutFields extends EntrySkeletonType {
@@ -136,7 +136,7 @@ export default function AboutPage() {
             {aboutData.workExperience.map((work, index) => (
               <li key={index}>
                 <strong>{work.jobTitle}</strong> at {work.company} (
-                {work.yearsOfService})
+                {work.yearOfService})
               </li>
             ))}
           </ul>
