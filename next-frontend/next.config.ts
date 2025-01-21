@@ -1,7 +1,12 @@
 const nextConfig = {
   reactStrictMode: true, // Keep this for debugging
   images: {
-    domains: ["images.ctfassets.net"], // Keep your required image domains
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.ctfassets.net", // For Contentful images
+      },
+    ],
   },
   env: {
     NEXT_PUBLIC_CONTENTFUL_SPACE_ID:
