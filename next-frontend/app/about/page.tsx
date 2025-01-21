@@ -1,12 +1,9 @@
 "use client";
 
-import MainMenu from "../components/MainMenu";
-
-export default function ContactPage() {
+export default function AboutPage() {
   return (
     <div>
-      <MainMenu />
-      <h1>Contact Page</h1>
+      <h1>About Page</h1>
       <p>This page has been simplified.</p>
     </div>
   );
