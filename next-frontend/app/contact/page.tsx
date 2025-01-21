@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import MainMenu from "../components/MainMenu";
 import client from "@/lib/contentful";
-import { EntrySkeletonType, Entry } from "contentful";
+import { EntrySkeletonType } from "contentful";
 
 interface ContactFields extends EntrySkeletonType {
   fields: {
@@ -13,8 +13,6 @@ interface ContactFields extends EntrySkeletonType {
   };
   contentTypeId: "contact";
 }
-
-type ContactEntry = Entry<ContactFields>;
 
 interface ContactData {
   email: string;
